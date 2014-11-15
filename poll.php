@@ -12,9 +12,10 @@ if ($result = $db->query("SELECT name FROM polls WHERE id=".$poll_id." LIMIT 1")
 	$poll_title = $row["name"];
 	$result->close();
 }
-if(isset($_GET["choice_id"])){
+if(isset($_GET["choice_id"]) and !(isset($_COOKIE["direktfeedbacka_".$poll_id]))){
 	$choice_id=$db->real_escape_string($_GET["choice_id"]);
 	$result = $db->query("UPDATE choices SET count=count+1 WHERE id=".$choice_id);
+	setcookie("direktfeedbacka_".$poll_id, 1, time()+60*60*24*30);
 }else if(isset($_POST["add"]) and ($c_addchoice==true)) {
 	$add_text=$db->real_escape_string($_POST["text"]);
 	$add_pollid=$db->real_escape_string($_POST["add_poll"]);
